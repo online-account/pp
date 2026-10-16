@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal - Account Setup</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Screen Wrapper Setup */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            height: 100vh;
+            position: relative;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 24px;
+            background-color: #ffffff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .screen.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .content-top {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        /* PayPal Logo Styling */
+        .paypal-logo {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 32px;
+        }
+
+        /* Top Bar Navigation & Step Indicators */
+        .top-nav {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .back-arrow {
+            font-size: 22px;
+            color: #000000;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .step-indicators {
+            display: flex;
+            gap: 6px;
+        }
+
+        .step-bar {
+            width: 32px;
+            height: 4px;
+            border-radius: 2px;
+            background-color: #e5e7eb;
+        }
+
+        .step-bar.active {
+            background-color: #0070ba;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .location-info {
+            font-size: 14px;
+            color: #6c737a;
+            margin-bottom: 36px;
+        }
+
+        .location-info span {
+            color: #0070ba;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        /* Input Field Styling */
+        .input-group {
+            position: relative;
+            width: 100%;
+            border: 2px solid #0070ba;
+            border-radius: 12px;
+            padding: 12px 16px;
+            background-color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .input-label {
+            font-size: 12px;
+            color: #515151;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #000000;
+            background: transparent;
+            font-family: inherit;
+        }
+
+        /* Disclaimer Text */
+        .disclaimer {
+            font-size: 12px;
+            color: #6c737a;
+            line-height: 1.4;
+            margin-top: 4px;
+        }
+
+        /* Next Button Styling */
+        .btn-next {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 30px;
+            width: 100%;
+            padding: 16px 0;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-next:hover {
+            background-color: #222222;
+        }
+
+        /* Spinner & Loading Styles */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border-left-color: #0070ba;
+            animation: spin 1s linear infinite;
+            margin-bottom: 24px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        
+        <!-- Screen 1: Email Input View -->
+        <div id="screen-email" class="screen active">
+            <div class="content-top">
+                <!-- PayPal Logo SVG -->
+                <svg class="paypal-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#003087" d="M19.336 5.372c-.938-.938-2.618-1.572-5.118-1.572H7.28c-.446 0-.83.33-.893.773L3.804 20.353a.563.563 0 0 0 .556.647h3.766l.812-5.143.08-.435c.063-.442.447-.773.893-.773h1.83c3.558 0 6.34-1.442 7.156-5.836.31-1.657-.02-2.956-1.061-3.994z"/>
+                    <path fill="#0070ba" d="M20.252 6.848c-.411-.85-1.04-1.564-1.854-2.12-.916-.628-2.046-1.01-3.37-1.134h-6.19c-.446 0-.83.33-.893.773L5.78 17.584c-.063.442.224.843.67.843h3.518l.812-5.143.08-.435c.063-.442.447-.773.893-.773h1.83c3.048 0 5.426-1.236 6.13-5.002.04-.216.066-.43.08-.636z"/>
+                    <path fill="#009cde" d="M17.478 7.766c-.328 1.751-1.884 3.12-4.135 3.12h-1.83c-.446 0-.83.33-.893.773l-.892 5.65-.183 1.157c-.063.442.224.843.67.843h2.954c.446 0 .83-.33.893-.773l.08-.435.812-5.143.08-.435c.063-.442.447-.773.893-.773h.466c2.251 0 4.07-1.05 4.59-3.792.203-1.085-.01-1.956-.582-2.613-.393-.455-.918-.813-1.536-1.077z"/>
+                </svg>
+
+                <h1>Let’s get started</h1>
+
+                <div class="location-info">
+                    United States <span>Change</span>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Enter your email</label>
+                    <input type="email" id="emailField" class="input-field" autofocus>
+                </div>
+            </div>
+
+            <div>
+                <button id="toPhoneBtn" class="btn-next">Next</button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Phone Number Input View -->
+        <div id="screen-phone" class="screen">
+            <div class="content-top">
+                <div class="top-nav">
+                    <a href="#" id="toEmailBtn" class="back-arrow">&#8592;</a>
+                    <div class="step-indicators">
+                        <div class="step-bar active"></div>
+                        <div class="step-bar"></div>
+                        <div class="step-bar"></div>
+                        <div class="step-bar"></div>
+                    </div>
+                </div>
+
+                <h1>What’s your number?</h1>
+
+                <div class="input-group">
+                    <label class="input-label">Mobile number</label>
+                    <input type="tel" class="input-field" value="+1 " id="phoneField">
+                </div>
+
+                <p class="disclaimer">
+                    By continuing, you confirm that you are authorized to use this phone number and agree to receive an SMS text. Carrier fees may apply.
+                </p>
+            </div>
+
+            <div>
+                <button id="submitPhoneBtn" class="btn-next">Next</button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Loading View -->
+        <div id="screen-loading" class="screen">
+            <div class="content-top" style="align-items: center; text-align: center; justify-content: center; height: 100%;">
+                <div class="spinner"></div>
+                <h1>Confirming your number</h1>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Screen Transition Logic -->
+    <script>
+        // --- NEW: Local Storage Check ---
+        // If the user is already logged in, redirect them instantly
+        if (localStorage.getItem('user_is_logged_in') === 'true') {
+            window.location.href = 'home.html';
+        }
+
+        const screenEmail = document.getElementById('screen-email');
+        const screenPhone = document.getElementById('screen-phone');
+        const screenLoading = document.getElementById('screen-loading');
+        
+        const toPhoneBtn = document.getElementById('toPhoneBtn');
+        const toEmailBtn = document.getElementById('toEmailBtn');
+        const submitPhoneBtn = document.getElementById('submitPhoneBtn');
+
+        // Transition to Phone Number Screen
+        toPhoneBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            screenEmail.classList.remove('active');
+            screenPhone.classList.add('active');
+            document.getElementById('phoneField').focus();
+        });
+
+        // Transition back to Email Screen
+        toEmailBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            screenPhone.classList.remove('active');
+            screenEmail.classList.add('active');
+            document.getElementById('emailField').focus();
+        });
+
+        // Submit Phone Number, Show Alert, then Load & Redirect
+        submitPhoneBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Show the alert box exactly as requested
+            alert('Phone number submitted successfully!');
+            
+            // Switch to loading screen
+            screenPhone.classList.remove('active');
+            screenLoading.classList.add('active');
+
+            // Wait 5 seconds (5000 ms) before saving state and redirecting to home.html
+            setTimeout(() => {
+                // Save the logged-in state before leaving the page
+                localStorage.setItem('user_is_logged_in', 'true');
+                window.location.href = 'home.html';
+            }, 5000); 
+        });
+    </script>
+
+</body>
+</html>
